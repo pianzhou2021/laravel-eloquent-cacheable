@@ -72,7 +72,6 @@ trait Cacheable
         // 清除缓存标记
         $this->cacheStore()->flush();
         // 清除缓存
-        var_dump($this->getChanges());
         $this->cacheStore()->forget($this->cacheableAs($this->getKey()));
     }
 
