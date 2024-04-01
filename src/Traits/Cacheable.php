@@ -82,7 +82,7 @@ trait Cacheable
      *
      * @param mixed $id
      * @param integer $ttl
-     * @return 
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public function cacheableById($id, $ttl = 600)
     {
@@ -96,7 +96,7 @@ trait Cacheable
      *
      * @param mixed $id
      * @param integer $ttl
-     * @return 
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public function cacheable($ttl = 600)
     {
@@ -110,7 +110,7 @@ trait Cacheable
      *
      * @param mixed $id
      * @param integer $ttl
-     * @return 
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public static function cachedById($id, $ttl = 600)
     {
@@ -121,7 +121,7 @@ trait Cacheable
      * 查找并缓存所有数据
      *
      * @param integer $ttl
-     * @return void
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public static function cached($ttl = 600)
     {
