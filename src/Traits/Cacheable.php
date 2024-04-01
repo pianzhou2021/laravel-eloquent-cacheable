@@ -31,7 +31,7 @@ trait Cacheable
      *
      * @return string
      */
-    public function cacheableAs($id)
+    public function cacheableAs($id = '__ALL__')
     {
         return config('cacheable.prefix') . '__CACHEABLE__' . $this->getTable() . '__' . $id;
     }
@@ -71,6 +71,8 @@ trait Cacheable
     {
         // 清除缓存标记
         $this->cacheStore()->flush();
+        // 清除全表缓存
+        $this->cacheStore()->forget($this->cacheableAs());
         // 清除缓存
         $this->cacheStore()->forget($this->cacheableAs($this->getKey()));
     }
@@ -82,10 +84,24 @@ trait Cacheable
      * @param integer $ttl
      * @return 
      */
-    public function cacheable($id, $ttl = 600)
+    public function cacheableById($id, $ttl = 600)
     {
         return $this->cacheStore()->remember($this->cacheableAs($id), $ttl, function() use ($id) {
             return static::find($id);
+        });
+    }
+
+    /**
+     * 缓存全表
+     *
+     * @param mixed $id
+     * @param integer $ttl
+     * @return 
+     */
+    public function cacheable($ttl = 600)
+    {
+        return $this->cacheStore()->remember($this->cacheableAs(), $ttl, function() {
+            return static::get();
         });
     }
 
@@ -96,8 +112,19 @@ trait Cacheable
      * @param integer $ttl
      * @return 
      */
-    public static function findAndCache($id, $ttl = 600)
+    public static function cachedById($id, $ttl = 600)
     {
-        return (new static)->cacheable($id, $ttl);
+        return (new static)->cacheableById($id, $ttl);
+    }
+
+    /**
+     * 查找并缓存所有数据
+     *
+     * @param integer $ttl
+     * @return void
+     */
+    public static function cached($ttl = 600)
+    {
+        return (new static)->cacheable($ttl);
     }
 }
